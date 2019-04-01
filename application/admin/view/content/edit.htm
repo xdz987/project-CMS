@@ -1,0 +1,430 @@
+<!DOCTYPE html>
+<html><head>
+	    <meta charset="utf-8">
+    <title>ThinkPHP5.0</title>
+
+    <meta name="description" content="Dashboard">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <!--Basic Styles-->
+    <link href="__ADMIN__/style/bootstrap.css" rel="stylesheet">
+    <link href="__ADMIN__/style/font-awesome.css" rel="stylesheet">
+    <link href="__ADMIN__/style/weather-icons.css" rel="stylesheet">
+
+    <!--Basic Scripts-->
+    <script src="__ADMIN__/style/jquery_002.js"></script>
+    <script src="__ADMIN__/plus/layer/layer.js"></script>
+    <script src="__ADMIN__/style/bootstrap.js"></script>
+
+    <link rel="stylesheet" type="text/css" href="__ADMIN__/plus/uploadify/Huploadify.css"/>
+    <script type="text/javascript" src="__ADMIN__/plus/uploadify/jquery.Huploadify.js"></script>
+
+    <!--Beyond styles-->
+    <link id="beyond-link" href="__ADMIN__/style/beyond.css" rel="stylesheet" type="text/css">
+    <link href="__ADMIN__/style/demo.css" rel="stylesheet">
+    <link href="__ADMIN__/style/typicons.css" rel="stylesheet">
+    <link href="__ADMIN__/style/animate.css" rel="stylesheet">
+    <script type="text/javascript" src="__ADMIN__/plus/ueditor/ueditor.config.js"></script>
+    <script type="text/javascript" src="__ADMIN__/plus/ueditor/ueditor.all.min.js"></script>
+    <script type="text/javascript" src="__ADMIN__/plus/ueditor/lang/zh-cn/zh-cn.js"></script>
+    <script type="text/javascript">
+    $(function(){
+        $('#uploadify').Huploadify({
+            auto:true,
+            fileTypeExts:'*.jpg;*.png;*.jpeg',
+            multi:true,
+            formData:{key:123456,key2:'vvvv'},
+            fileSizeLimit:2048,
+            showUploadedPercent:true,//是否实时显示上传的百分比，如20%
+            showUploadedSize:true,
+            removeTimeout:2,
+            'uploader':"{:url('Content/upimg')}",
+            'buttonText':'上传文件',
+            'progressData':'speed',
+            //'buttonClass':'btn btn-azure',下载的插件没有这个设置项
+            'fileObjName':'img',
+            onUploadSuccess: function(file,data,response){
+                $("input[name='litpic']").val(data);
+                var imgsrc="__INDEX__/uploads/img/"+data;
+                var img="<img height='100px' src='"+imgsrc+"'>";
+                $("#imgdiv").show();
+                $("#img").html(img);
+            },
+            onUploadStart:function(){
+                //alert('开始上传');
+                },
+            onInit:function(){
+                //alert('初始化');
+                },
+            onUploadComplete:function(){
+                //alert('上传完成');
+                },
+            });
+        });
+    </script>
+</head>
+<body>
+	<!-- 头部 -->
+	{include file="common/head"}
+	<!-- /头部 -->
+	
+	<div class="main-container container-fluid">
+		<div class="page-container">
+			<!-- Page Sidebar -->
+            {include file="common/left"}
+            <!-- /Page Sidebar -->
+            <!-- Page Content -->
+            <div class="page-content">
+                <!-- Page Breadcrumb -->
+                <div class="page-breadcrumbs">
+                    <ul class="breadcrumb">
+                                        <li>
+                        <a href="{:url('index/index')}">系统</a>
+                    </li>
+                                        <li>
+                        <a href="{:url('lst')}">文档管理</a>
+                    </li>
+                                        <li class="active">修改文档</li>
+                                        </ul>
+                </div>
+                <!-- /Page Breadcrumb -->
+
+                <!-- Page Body -->
+                <div class="page-body">
+                    
+<div class="row">
+    <div class="col-lg-12 col-sm-12 col-xs-12">
+        <div class="widget">
+            <div class="widget-header bordered-bottom bordered-blue">
+                <span class="widget-caption">修改文档</span>
+            </div>
+            <div class="widget-body">
+                <div id="horizontal-form">
+                    <form class="form-horizontal" role="form" action="" method="post" enctype="multipart/form-data">
+                        <input type="hidden" name="id" value="{$arts.id}">
+                        <div class="form-group">
+                            <label for="username" class="col-sm-2 control-label no-padding-right">标题</label>
+                            <div class="col-sm-6">
+                                <input class="form-control"  placeholder="" name="title" value="{$arts.title}" required="" type="text">
+                            </div>
+                            <p class="help-block col-sm-4 red">* 必填</p>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="username" class="col-sm-2 control-label no-padding-right">属性</label>
+                            <div class="col-sm-6">
+                                <?php 
+                                    $attr = $arts['attr'];
+                                    $attr = explode(',',$attr);
+                                ?>
+                                <div class="checkbox" style="float:left;padding-left:10px">
+                                    <label>
+                                        <input name="attr[]" type="checkbox" <?php if(in_array('头条',$attr)) echo 'checked="checked"'; ?> value="头条" class="colored-blue">
+                                        <span class="text">头条</span>
+                                    </label>
+                                </div>
+                                <div class="checkbox" style="float:left;padding-left:10px">
+                                    <label>
+                                        <input name="attr[]" type="checkbox" <?php if(in_array('推荐',$attr)) echo 'checked="checked"'; ?> value="推荐" class="colored-blue">
+                                        <span class="text">推荐</span>
+                                    </label>
+                                </div>
+                                <div class="checkbox" style="float:left;padding-left:10px">
+                                    <label>
+                                        <input name="attr[]" type="checkbox" <?php if(in_array('幻灯',$attr)) echo 'checked="checked"'; ?> value="幻灯" class="colored-blue">
+                                        <span class="text">幻灯</span>
+                                    </label>
+                                </div>
+                                <div class="checkbox" style="float:left;padding-left:10px">
+                                    <label>
+                                        <input name="attr[]" type="checkbox" <?php if(in_array('加粗',$attr)) echo 'checked="checked"'; ?> value="加粗" class="colored-blue">
+                                        <span class="text">加粗</span>
+                                    </label>
+                                </div>
+                                <div class="checkbox" style="float:left;padding-left:10px">
+                                    <label>
+                                        <input name="attr[]" type="checkbox" <?php if(in_array('图片',$attr)) echo 'checked="checked"'; ?> value="图片" class="colored-blue">
+                                        <span class="text">图片</span>
+                                    </label>
+                                </div>
+                        </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="username" class="col-sm-2 control-label no-padding-right">所属栏目</label>
+                            <div class="col-sm-6">
+                                    {volist name="cateRes" id="cate"}
+                                    {if condition="$cate['id'] eq $cateId"}
+                                    <span class="form-control">{$cate.cate_name}</span>
+                                    {/if} 
+                                    {/volist}
+                                    <input type="hidden" name="cate_id" value="{$cate.id}">
+                            </div>
+                            <p class="help-block col-sm-4 red">* 必填</p>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="username" class="col-sm-2 control-label no-padding-right">关键词</label>
+                            <div class="col-sm-6">
+                                <input class="form-control" placeholder="" name="keywords" value="{$arts.keywords}" required="" type="text">
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="username" class="col-sm-2 control-label no-padding-right">描述</label>
+                            <div class="col-sm-6">
+                                <textarea name="description" class="form-control">{$arts.description}</textarea>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="username" class="col-sm-2 control-label no-padding-right">作者</label>
+                            <div class="col-sm-6">
+                                <input class="form-control" name="writer" value="{$arts.writer}" placeholder="" required="" type="text">
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="username" class="col-sm-2 control-label no-padding-right">来源</label>
+                            <div class="col-sm-6">
+                                <input class="form-control" name="source" value="{$arts.source}" placeholder="" required="" type="text">
+                            </div>
+                        </div>
+                        
+                        <!-- <div class="form-group">
+                            <label for="username" class="col-sm-2 control-label no-padding-right">缩略图</label>
+                            <div class="col-sm-6">
+                                <input  placeholder="" name="litpic" required="" type="file">
+                            </div>
+                        </div> -->
+
+                        <div class="form-group">
+                            <label for="username" class="col-sm-2 control-label no-padding-right">缩略图</label>
+                            <div class="col-sm-6">
+                                <label>
+                                    <div id="uploadify"></div>
+                                    <span class="text"></span>
+                                    <input name="litpic" value="{$arts.litpic}" type="hidden">
+                                </label>
+
+                                <label>
+                                    <div id="cancel" style="float: left;" class="uploadify-button btn btn-azure"><span class="uploadify-button-text"><i style="padding-right: 4px" class="fa fa-rotate-left"></i>撤销上传</span></div>
+                                </label>
+                            </div>
+                        </div>
+                        <div class="form-group" id="imgdiv" {if condition="$arts['litpic'] eq ''"}style="display: none; {/if}">
+                            <label for="username" class="col-sm-2 control-label no-padding-right"></label>
+                            <div class="col-sm-6">
+                                <label id="img">
+                                    {if condition="$arts['litpic'] neq ''"}
+                                    <img src="__INDEX__/uploads/img/{$arts.litpic}" height="100">
+                                    {/if}
+                                </label>
+                            </div>
+                            <p class="help-block col-sm-4 red">* 必填</p>
+                        </div>
+
+                        <!-- 自定义字段开始 -->
+                        <?php foreach ($diyFields as $k => $v): ?>
+                            <div class="form-group">
+                            <label for="username" class="col-sm-2 control-label no-padding-right"><?php echo $v['field_cname'] ?></label>
+                            <div class="col-sm-6">
+                                <?php
+                                switch ($v['field_type']) {
+                                    case 1:
+                                    case 7:
+                                    case 8:
+                                        echo "<input type='text' value='".$diyvals[$v['field_ename']]."' name='".$v['field_ename']."' class='form-control'>";
+                                        break;
+                                    case 5:
+                                        echo "<textarea name='".$v['field_ename']."' class='form-control'>".$diyvals[$v['field_ename']]."</textarea>";
+                                        break;
+                                    case 6:
+                                        echo "<input type='file' name='".$v['field_ename']."'>";
+                                        if($diyvals[$v['field_ename']]){
+                                            echo "<img src='__INDEX__/uploads/att/".$diyvals[$v['field_ename']]."' height='60'>
+                                            <a href='javascript:;' onclick='delimg(this)'>删除</a>
+                                            ";
+                                        }
+                                        break;
+                                    case 2:
+                                        if($v['field_values']){
+                                            $arr = explode(',',$v['field_values']);
+                                            foreach($arr as $k1 => $v1){
+                                                if($diyvals[$v['field_ename']] == $v1){
+                                                    $check='checked="checked"';
+                                                }else{
+                                                    $check='';
+                                                }
+                                                echo "<label>";
+                                                echo "<input type='radio' ".$check." name='".$v['field_ename']."' class='colored-blue' value='".$v1."'>";
+                                                echo "<span class='text'>$v1</span>";
+                                                echo "</label> ";
+                                            }
+                                        }
+                                        break;
+                                    case 3:
+                                        if($v['field_values']){
+                                            $arr = explode(',',$v['field_values']);
+                                            $arr2 = explode(',',$diyvals[$v['field_ename']]);
+                                            foreach($arr as $k1 => $v1){
+                                                if(in_array($v1,$arr2)){
+                                                    $check='checked="checked"';
+                                                }
+                                                else{
+                                                    $check='';
+                                                }
+                                                echo "<div class='checkbox' style='float:left;padding-left:10px'>";
+                                                echo "<label>";
+                                                echo "<input type='checkbox' ".$check." name='".$v['field_ename']."[]' class='colored-blue' value='".$v1."'>";
+                                                echo "<span class='text'>$v1</span>";
+                                                echo "</label>  ";
+                                                echo "</div>";
+                                            }
+                                        }
+                                        break;
+                                    case 4:
+                                        if($v['field_values']){
+                                            $arr = explode(',',$v['field_values']);
+                                            echo "<select name='".$v['field_ename']."'>";
+                                            foreach($arr as $k1 => $v1){
+                                                if($diyvals[$v['field_ename']] == $v1){
+                                                    $select='selected="selected"';
+                                                }
+                                                else{
+                                                    $select='';
+                                                }
+                                                echo "<option ".$select." value='".$v1."'>".$v1."</option>";
+                                            }
+                                            echo "</select>";
+                                        }
+                                        break;
+                                    case 9:
+                                        echo get_ueditor($v['field_ename'],$diyvals[$v['field_ename']]);
+                                        break;
+                                    default:
+                                        echo "<input type='text' name='".$v['field_ename']."' class='form-control'>";
+                                        break;
+                                }
+                                ?>
+                            </div>
+                        </div>
+                        <?php endforeach;?>
+                        <!-- 自定义字段结束 -->
+                        
+                        <script type="text/javascript">
+                            function delimg(o){
+                                layer.confirm('确定要撤销图片吗？', {icon: 3, title:'提示'}, function(index){
+                                var img = $(o).prev();
+                                var input = img.prev();
+                                var field_name = input.attr("name");
+                                img.remove();
+                                $(o).remove();
+                                var aid="{$aid}";
+                                var model_id="{$modelId}";
+                                $.ajax({
+                                    type:"POST",
+                                    url:"{:url('Content/ajaxDelImg')}",
+                                    dataType:"json",
+                                    data:{'aid':aid,'model_id':model_id,'field_name':field_name},
+                                    success:function(data){
+                                        if(data==1){
+                                            layer.msg('删除图片成功!', {icon: 1});
+                                        }else{
+                                            layer.msg('删除图片失败!', {icon: 2});
+                                        }
+                                    }
+                                });
+
+                                layer.close(index);
+                                });
+                            }   
+                        </script>
+
+                        <div class="form-group">
+                            <label for="username" class="col-sm-2 control-label no-padding-right">内容</label>
+                            <div class="col-sm-6">
+                                <textarea name="content" id="content">{$arts.content}</textarea>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="group_id" class="col-sm-2 control-label no-padding-right">点击数</label>
+                            <div class="col-sm-6">
+                                <input class="form-control" placeholder="" name="click" value="{$arts.click}" required="" type="text">
+                            </div>
+                        </div>  
+                        <div class="form-group">
+                            <div class="col-sm-offset-2 col-sm-10">
+                                <button type="submit" class="btn btn-default">保存信息</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+                </div>
+                <!-- /Page Body -->
+            </div>
+            <!-- /Page Content -->
+		</div>	
+	</div>
+
+	    <!--Basic Scripts-->
+    <script src="__ADMIN__/style/bootstrap.js"></script>
+    <!--Beyond Scripts-->
+    <script src="__ADMIN__/style/beyond.js"></script>
+    <script type="text/javascript">
+        //实例化编辑器
+        //建议使用工厂方法getEditor创建和引用编辑器实例，如果在某个闭包下引用该编辑器，直接调用UE.getEditor('editor')就能拿到相关的实例
+        UE.getEditor('content',{toolbars:[
+            [
+                'fullscreen', 'source', '|', 'undo', 'redo', '|',
+            'bold', 'italic', 'underline', 'fontborder', 'strikethrough', 'pasteplain', '|', 'forecolor', 'backcolor', 'insertorderedlist', 'insertunorderedlist', 'selectall', 'cleardoc', '|',
+            'rowspacingtop', 'rowspacingbottom', 'lineheight', '|',
+            'customstyle', 'paragraph', 'fontfamily', 'fontsize', '|',
+            'directionalityltr', 'directionalityrtl', 
+            // 'indent', '|',
+            // 'justifyleft', 'justifycenter', 'justifyright', 'justifyjustify', '|', 'touppercase', 'tolowercase', '|',
+            // 'link', 'unlink', 'anchor', '|', 'imagenone', 'imageleft', 'imageright', 'imagecenter', '|',
+            // 'simpleupload', 'insertimage', 'emotion', 'scrawl', 'insertvideo', 'music', 'attachment'
+            ]
+            ],initialFrameWidth:1000,initialFrameHeight:400,});
+        $("#cancel").click(function(){
+            var imgurl = $("input[name='litpic']").val();
+            if(!imgurl){
+                //alert('请先上传图片！');
+                layer.msg('请先上传图片!', {icon: 2});
+                return false;
+            }
+            // if(!confirm('确定要撤销图片吗？')){
+            //     return false;
+            // }
+            layer.confirm('确定要撤销图片吗？', {icon: 3, title:'提示'}, function(index){
+                //do something
+                $("#imgdiv").hide();
+                $("input[name='img']").val('');  
+                $.ajax({
+                    type:"post",
+                    dataType:"json",
+                    data:{imgurl:imgurl},
+                    url:"{:url('Content/delimg')}",
+                    success:function(data){
+                        if(data==1){
+                            layer.msg('撤销成功!', {icon: 1});
+                        }else{
+                            layer.msg('撤销失败!', {icon: 2});
+                        }
+                    }
+                });    
+                layer.close(index);
+            });
+        });
+    </script>
+
+
+</body></html>

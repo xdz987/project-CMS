@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html><head>
+	    <meta charset="utf-8">
+    <title>ThinkPHP5.0</title>
+
+    <meta name="description" content="Dashboard">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <!--Basic Styles-->
+    <link href="__ADMIN__/style/bootstrap.css" rel="stylesheet">
+    <link href="__ADMIN__/style/font-awesome.css" rel="stylesheet">
+    <link href="__ADMIN__/style/weather-icons.css" rel="stylesheet">
+
+    <!--Beyond styles-->
+    <link id="beyond-link" href="__ADMIN__/style/beyond.css" rel="stylesheet" type="text/css">
+    <link href="__ADMIN__/style/demo.css" rel="stylesheet">
+    <link href="__ADMIN__/style/typicons.css" rel="stylesheet">
+    <link href="__ADMIN__/style/animate.css" rel="stylesheet">
+    <style type="text/css">
+        .form-controller{width:200px; float:left;margin-right: 20px;}
+    </style>
+</head>
+<body>
+	<!-- 头部 -->
+	{include file="common/head"}
+	<!-- /头部 -->
+	
+	<div class="main-container container-fluid">
+		<div class="page-container">
+			<!-- Page Sidebar -->
+            {include file="common/left"}
+            <!-- /Page Sidebar -->
+            <!-- Page Content -->
+            <div class="page-content">
+                <!-- Page Breadcrumb -->
+                <div class="page-breadcrumbs">
+                    <ul class="breadcrumb">
+                                        <li>
+                        <a href="{:url('index/index')}">系统</a>
+                    </li>
+                                        <li class="active">采集节点管理</li>
+                                        </ul>
+                </div>
+                <!-- /Page Breadcrumb -->
+
+                <!-- Page Body -->
+                <div class="page-body">
+                    
+<div class="row">
+    <div class="col-lg-12 col-sm-12 col-xs-12">
+        <div class="widget">
+            <div class="widget-body">
+                <div class="widget-main ">
+                    <div class="tabbable">
+                        <ul class="nav nav-tabs tabs-flat" id="myTab11">
+                            <li class="active">
+                                <a data-toggle="tab" href="#home11">
+                                    采集列表信息配置
+                                </a>
+                            </li>
+                            <li class="">
+                                <a data-toggle="tab" href="#profile11">
+                                    采集内容信息配置
+                                </a>
+                            </li>
+                        </ul>
+                    <form class="form-horizontal" role="form" action="" method="post">
+                        <input type="hidden" name="id" value="{$id}">
+                        <div class="tab-content tabs-flat">
+                            <div id="home11" class="tab-pane active">
+                                <!-- 采集列表信息开始 -->
+                                <div id="horizontal-form">
+                                        <div class="form-group">
+                                            <label for="username" class="col-sm-2 control-label no-padding-right">节点名称</label>
+                                            <div class="col-sm-6">
+                                                <input class="form-control" value="{$notes.note_name}" placeholder="" name="note_name" required="" type="text">
+                                            </div>
+                                            <p class="help-block col-sm-4 red">* 必填</p>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label for="group_id" class="col-sm-2 control-label no-padding-right">所属模型</label>
+                                            <div class="col-sm-6">
+                                                <label class="control-label">{$modelName}</label>
+                                                <input type="hidden" name="model_id" value="{$modelId}">
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label for="username" class="col-sm-2 control-label no-padding-right">输出编码</label>
+                                            <div class="col-sm-6">
+                                                <label>
+                                                    <input {if condition="$notes['output_encoding'] eq 'UTF-8'"} checked="checked"{/if} value="UTF-8" name="output_encoding" type="radio" class="colored-blue">
+                                                    <span class="text">UTF-8</span>
+                                                </label>
+                                                <label>
+                                                    <input {if condition="$notes['output_encoding'] eq 'GB2312'"} checked="checked"{/if} value="GB2312" name="output_encoding" type="radio" class="colored-blue">
+                                                    <span class="text">GB2312</span>
+                                                </label>
+                                            </div>
+                                            <p class="help-block col-sm-4 red">* 必填</p>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label for="username" class="col-sm-2 control-label no-padding-right">输入编码</label>
+                                            <div class="col-sm-6">
+                                                <label>
+                                                    <input {if condition="$notes['input_encoding'] eq 'UTF-8'"} checked="checked"{/if} value="UTF-8" name="input_encoding" type="radio" class="colored-blue">
+                                                    <span class="text">UTF-8</span>
+                                                </label>
+                                                <label>
+                                                    <input {if condition="$notes['input_encoding'] eq 'GB2312'"} checked="checked"{/if} value="GB2312" name="input_encoding" type="radio" class="colored-blue">
+                                                    <span class="text">GB2312</span>
+                                                </label>
+                                            </div>
+                                            <p class="help-block col-sm-4 red">* 必填</p>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label for="username" class="col-sm-2 control-label no-padding-right">列表url</label>
+                                            <div class="col-sm-6">
+                                                <input class="form-control" value="{$listRules.list_url}" placeholder="" name="list_url" required="" type="text">
+                                            </div>
+                                            <p class="help-block col-sm-4 red">* 动态页码使用(*)代替</p>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label for="username" class="col-sm-2 control-label no-padding-right">页码配置</label>
+                                            <div class="col-sm-6">
+                                                <span class="control-label" style="float: left;padding: 10px 10px">从</span>
+                                                <input class="form-control" style="width: 50px;text-align: center;float: left;" name="start_page" required="" value="{$listRules.start_page}" type="text">
+                                                <span class="control-label" style="float: left;padding: 10px 10px">到</span>
+                                                <input class="form-control" style="width: 50px;text-align: center;float: left;" name="end_page" required="" value="{$listRules.end_page}" type="text">
+                                                <span class="control-label" style="float: left;padding: 10px 10px">每次递增</span>
+                                                <input class="form-control" style="width: 50px;text-align: center;float: left;"  name="step" required="" value="{$listRules.step}" type="text">
+                                            </div>
+                                            <p class="help-block col-sm-4 red">* 必填</p>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label for="username" class="col-sm-2 control-label no-padding-right">采集范围</label>
+                                            <div class="col-sm-6">
+                                                <textarea name="range" class="form-control">{$listRules.range}</textarea>
+                                            </div>
+                                            <p class="help-block col-sm-4 red">* 必填</p>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label for="username" class="col-sm-2 control-label no-padding-right">URL采集规则</label>
+                                            <div class="col-sm-6">
+                                                <textarea name="url" class="form-control"><?php echo $listRules['list_rules']['url']; ?></textarea>
+                                            </div>
+                                            <p class="help-block col-sm-4 red">* 必填</p>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label for="username" class="col-sm-2 control-label no-padding-right">缩略图采集规则</label>
+                                            <div class="col-sm-6">
+                                                <textarea name="litpic" class="form-control"><?php echo $listRules['list_rules']['litpic']; ?></textarea>
+                                            </div>
+                                            <p class="help-block col-sm-4 red">* 必填</p>
+                                        </div>
+                                </div>
+                                <!-- 采集列表信息结束 -->
+                            </div>
+
+                            <div id="profile11" class="tab-pane">
+                                <!-- 采集内容信息开始 -->
+                                <div id="horizontal-form111">
+                                        <div class="form-group">
+                                            <label  class="col-sm-2 control-label no-padding-right">标题</label>
+                                            <div class="col-sm-6">
+                                                <input class="form-control form-controller" placeholder="采集规则" name="title[0]" value="<?php echo $itemRules['title'][0];?>" required="" type="text">
+                                                <input class="form-control form-controller" placeholder="采集属性" name="title[1]" value="<?php echo $itemRules['title'][1];?>" required="" type="text">
+                                                <input class="form-control form-controller" placeholder="过滤规则" name="title[2]" value="<?php echo $itemRules['title'][2];?>" type="text">
+                                            </div>
+                                            <p class="help-block col-sm-4 red">* 必填</p>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label  class="col-sm-2 control-label no-padding-right">关键词</label>
+                                            <div class="col-sm-6">
+                                                <input class="form-control form-controller" placeholder="采集规则" name="keywords[0]" value="<?php echo $itemRules['keywords'][0];?>" type="text">
+                                                <input class="form-control form-controller" placeholder="采集属性" name="keywords[1]" value="<?php echo $itemRules['keywords'][1];?>" type="text">
+                                                <input class="form-control form-controller" placeholder="过滤规则" name="keywords[2]" value="<?php echo $itemRules['keywords'][2];?>" type="text">
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label  class="col-sm-2 control-label no-padding-right">描述</label>
+                                            <div class="col-sm-6">
+                                                <input class="form-control form-controller" placeholder="采集规则" name="description[0]" value="<?php echo $itemRules['description'][0];?>" type="text">
+                                                <input class="form-control form-controller" placeholder="采集属性" name="description[1]" value="<?php echo $itemRules['description'][1];?>" type="text">
+                                                <input class="form-control form-controller" placeholder="过滤规则" name="description[2]" value="<?php echo $itemRules['description'][2];?>" type="text">
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label  class="col-sm-2 control-label no-padding-right">作者</label>
+                                            <div class="col-sm-6">
+                                                <input class="form-control form-controller" placeholder="采集规则" name="writer[0]"  type="text">
+                                                <input class="form-control form-controller" placeholder="采集属性" name="writer[1]" type="text">
+                                                <input class="form-control form-controller" placeholder="过滤规则" name="writer[2]" type="text">
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label  class="col-sm-2 control-label no-padding-right">来源</label>
+                                            <div class="col-sm-6">
+                                                <input class="form-control form-controller" placeholder="采集规则" name="source[0]" type="text">
+                                                <input class="form-control form-controller" placeholder="采集属性" name="source[1]" type="text">
+                                                <input class="form-control form-controller" placeholder="过滤规则" name="source[2]" type="text">
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label  class="col-sm-2 control-label no-padding-right">内容</label>
+                                            <div class="col-sm-6">
+                                                <input class="form-control form-controller" placeholder="采集规则" name="content[0]" type="text">
+                                                <input class="form-control form-controller" placeholder="采集属性" name="content[1]" type="text">
+                                                <input class="form-control form-controller" placeholder="过滤规则" name="content[2]" type="text">
+                                            </div>
+                                        </div>
+                                        {if condition="$modelFieldRes"}
+                                        {volist name="modelFieldRes" id="modelField"}
+                                        <div class="form-group">
+                                            <label  class="col-sm-2 control-label no-padding-right">{$modelField.field_cname}</label>
+                                            <div class="col-sm-6">
+                                                <input class="form-control form-controller" placeholder="采集规则" name="{$modelField.field_ename}[0]" value="<?php echo $itemRules[$modelField['field_ename']][0];?>" type="text">
+                                                <input class="form-control form-controller" placeholder="采集属性" name="{$modelField.field_ename}[1]" value="<?php echo $itemRules[$modelField['field_ename']][1];?>" type="text">
+                                                <input class="form-control form-controller" placeholder="过滤规则" name="{$modelField.field_ename}[2]" value="<?php echo $itemRules[$modelField['field_ename']][2];?>" type="text">
+                                            </div>
+                                        </div>
+                                        {/volist}
+                                        {/if}
+                                </div>
+                                <!-- 采集内容信息结束 -->
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-sm-offset-2 col-sm-10">
+                                <button type="submit" class="btn btn-default">保存信息</button>
+                            </div>
+                        </div>
+                    </form>
+                    </div>
+                </div>
+            </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+                </div>
+                <!-- /Page Body -->
+            </div>
+            <!-- /Page Content -->
+		</div>	
+	</div>
+
+	    <!--Basic Scripts-->
+    <script src="__ADMIN__/style/jquery_002.js"></script>
+    <script src="__ADMIN__/style/bootstrap.js"></script>
+    <!--Beyond Scripts-->
+    <script src="__ADMIN__/style/beyond.js"></script>
+    
+
+
+</body></html>

@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html><head>
+	    <meta charset="utf-8">
+    <title>ThinkPHP5.0</title>
+
+    <meta name="description" content="Dashboard">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <!--Basic Styles-->
+    <link href="__ADMIN__/style/bootstrap.css" rel="stylesheet">
+    <link href="__ADMIN__/style/font-awesome.css" rel="stylesheet">
+    <link href="__ADMIN__/style/weather-icons.css" rel="stylesheet">
+    <script src="__ADMIN__/style/jquery_002.js"></script>
+    <script src="__ADMIN__/plus/layer/layer.js"></script>
+
+    <!--Beyond styles-->
+    <link id="beyond-link" href="__ADMIN__/style/beyond.css" rel="stylesheet" type="text/css">
+    <link href="__ADMIN__/style/demo.css" rel="stylesheet">
+    <link href="__ADMIN__/style/typicons.css" rel="stylesheet">
+    <link href="__ADMIN__/style/animate.css" rel="stylesheet">
+    
+</head>
+<body>
+	<!-- 头部 -->
+	{include file="common/head"}
+	<!-- /头部 -->
+	
+	<div class="main-container container-fluid">
+		<div class="page-container">
+			<!-- Page Sidebar -->
+            {include file="common/left"}
+            <!-- /Page Sidebar -->
+            <!-- Page Content -->
+            <div class="page-content">
+                <!-- Page Breadcrumb -->
+                <div class="page-breadcrumbs">
+                    <ul class="breadcrumb">
+                                        <li>
+                        <a href="{:url('index/index')}">系统</a>
+                    </li>
+                                        <li class="active">文档管理</li>
+                                        </ul>
+                </div>
+                <!-- /Page Breadcrumb -->
+
+                <!-- Page Body -->
+                <div class="page-body">
+{if condition="$modelId neq 0"}
+<button type="button" tooltip="添加用户" class="btn btn-sm btn-azure btn-addon" onClick="javascript:window.location.href = '{:url('Content/add',['cate_id'=>$cateId,'model_id'=>$modelId])}'"> <i class="fa fa-plus"></i> Add
+</button>
+{/if}
+<div class="row">
+    <div class="col-lg-12 col-sm-12 col-xs-12">
+        <div class="widget">
+            <div class="widget-body">
+                <div class="flip-scroll">
+                    <table class="table table-bordered table-hover">
+                        <thead class="">
+                            <tr>
+                                <th class="text-center" width="8%">ID</th>
+                                <th>文章标题</th>
+                                <th class="text-center" width="14%">属性</th>
+                                <th class="text-center" width="14%">所属栏目</th>
+                                <th class="text-center" width="10%">所属模型</th>
+                                <th class="text-center" width="14%">操作</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        {volist name="artRes" id="art"}
+                            <tr>
+                                <td align="center">{$art.id}</td>
+                                <td>{$art.title}</td>
+                                <td align="center">
+                                <?php if($art['attr']):
+                                    $attrArr = explode(',',$art['attr']);
+                                    foreach($attrArr as $v){
+                                        echo "<span class='label label-yellow'>".$v."</span>";
+                                    }
+                                ?>
+                                <?php else:?>
+                                    暂无属性
+                                <?php endif;?>
+                                </td>
+                                <td align="center">{$art.cate_name}</td>
+                                <td align="center">{$art.model_name}</td>
+                                <td align="center">
+                                    <a href="{:url('Content/edit',array('art_id'=>$art.id,'model_id'=>$art.model_id))}" class="btn btn-primary btn-sm shiny">
+                                        <i class="fa fa-edit"></i> 编辑
+                                    </a>
+                                    <a href="#" id="{$art.id}" tablename="{$art.table_name}" onClick="ajaxdel(this);" class="btn btn-danger btn-sm shiny">
+                                        <i class="fa fa-trash-o"></i> 删除
+                                    </a>
+                                </td>
+                            </tr>
+                        {/volist}
+                        </tbody>
+                    </table>
+                </div>
+                <div style="padding-top: 10px;text-align: right;">
+                    {$artRes->render()}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+                </div>
+                <!-- /Page Body -->
+            </div>
+            <!-- /Page Content -->
+		</div>	
+	</div>
+
+	    <!--Basic Scripts-->
+    <script src="__ADMIN__/style/bootstrap.js"></script>
+    <!--Beyond Scripts-->
+    <script src="__ADMIN__/style/beyond.js"></script>
+    
+    <script type="text/javascript">
+        //ajax删除文章
+        function ajaxdel(o){
+            layer.confirm('确定删除文章吗？',{icon:3,title:'提示'},function(index){
+                //获取文章id
+                var id = $(o).attr('id');
+                var tablename = $(o).attr('tablename');
+                $.ajax({
+                    type:"POST",
+                    dataType:"json",
+                    data:{id:id,tablename:tablename},
+                    url:"{:url('Content/ajaxdel')}",
+                    success:function(data){
+                        if(data == 1){
+                            layer.msg('删除文章成功！',{icon:1});
+                            window.location.href="{:url('Content/lst')}";
+                        }else{
+                            layer.msg('删除文章失败！',{icon:2});
+                        }
+                    }
+                });
+                layer.close(index);
+            });
+        }
+    </script>
+
+
+</body></html>
